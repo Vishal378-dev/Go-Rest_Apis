@@ -1,7 +1,10 @@
 package main
 
-import "fmt"
-
 func main() {
-	fmt.Println("hello there")
+
+	// load config
+	// logger package
+	// db setup
+	// route setting
+	// server
 }
