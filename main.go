@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/vishal/Rest_Apis/internal/configs"
+	"github.com/vishal/Rest_Apis/internal/http/handler/employee"
 )
 
 func main() {
@@ -21,14 +22,7 @@ func main() {
 	// db setup
 	// route setting
 	r := http.NewServeMux()
-	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == "GET" {
-			w.Write([]byte("Hello"))
-		} else {
-			w.Write([]byte("wrong method"))
-		}
-
-	})
+	r.HandleFunc("/", employee.NewEmployee())
 	// server
 	slog.Info("server started", slog.String("Address -", cfg.HttpServer.Address))
 	server := http.Server{
