@@ -30,7 +30,7 @@ func main() {
 	fmt.Println(storage)
 	// route setting
 	r := http.NewServeMux()
-	r.HandleFunc("/", employee.NewEmployee())
+	r.HandleFunc("/", employee.NewEmployee(storage))
 	// server
 	slog.Info("server started", slog.String("Address -", cfg.HttpServer.Address))
 	server := http.Server{

@@ -12,6 +12,24 @@ type SQLITE struct {
 	DBConn *sql.DB
 }
 
+func (sqlite *SQLITE) CreateEmployee(empid string, name string, email string, phonenumber int, salary int) (string, error) {
+	statement, err := sqlite.DBConn.Prepare("INSERT INTO EMPLOYEE (EMPID,NAME, EMAIL,PHONENUMBER,SALARY) VALUES (?,?,?,?,?)")
+	if err != nil {
+		return "", err
+	}
+	defer statement.Close()
+	res, err := statement.Exec(empid, name, email, phonenumber, salary)
+	fmt.Println("the value is -- > ", res)
+	if err != nil {
+		return "", err
+	}
+	LastId, err := res.LastInsertId()
+	if err != nil {
+		return "", err
+	}
+	return string(LastId), nil
+}
+
 func New(cfg *configs.Config) (*SQLITE, error) {
 	db, err := sql.Open("sqlite3", cfg.Storage_path)
 	if err != nil {
@@ -24,7 +42,6 @@ func New(cfg *configs.Config) (*SQLITE, error) {
 		PHONENUMBER INTEGER,
 		SALARY INTEGER
 	)`)
-
 	if err != nil {
 		fmt.Println("error while creating table")
 		return nil, err

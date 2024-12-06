@@ -9,11 +9,12 @@ import (
 	"net/http"
 
 	"github.com/go-playground/validator/v10"
+	db "github.com/vishal/Rest_Apis/DB"
 	"github.com/vishal/Rest_Apis/internal/http/types"
 	"github.com/vishal/Rest_Apis/internal/utils"
 )
 
-func NewEmployee(storage storage) http.HandlerFunc {
+func NewEmployee(db db.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "POST" {
 			var employee types.Employee
@@ -38,7 +39,13 @@ func NewEmployee(storage storage) http.HandlerFunc {
 				return
 			}
 
-			utils.WriteResponse(w, http.StatusOK, employee)
+			// storing student in db
+			lastId, err := db.CreateEmployee(employee.EmpID, employee.Name, employee.Email, employee.PhoneNumber, int(employee.Salary))
+			if err != nil {
+				utils.CommonError(err)
+			}
+
+			utils.WriteResponse(w, http.StatusOK, lastId)
 		} else {
 			w.Write([]byte("wrong method"))
 		}

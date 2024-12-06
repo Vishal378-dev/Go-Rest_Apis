@@ -1,5 +1,5 @@
 package db
 
 type DB interface {
-	CreateEmployee(name string, email string, phonenumber int) (string, error)
+	CreateEmployee(empid string, name string, email string, phonenumber int, salary int) (string, error)
 }
