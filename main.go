@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"log/slog"
 	"net/http"
@@ -10,6 +11,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/vishal/Rest_Apis/DB/sqlite"
 	"github.com/vishal/Rest_Apis/internal/configs"
 	"github.com/vishal/Rest_Apis/internal/http/handler/employee"
 )
@@ -20,6 +22,12 @@ func main() {
 	// logger package
 
 	// db setup
+	storage, err := sqlite.New(cfg)
+	if err != nil {
+		log.Fatal(err)
+	}
+	slog.Info("storage initialized", slog.String("env", cfg.Env), slog.String("version", "1.0.0"))
+	fmt.Println(storage)
 	// route setting
 	r := http.NewServeMux()
 	r.HandleFunc("/", employee.NewEmployee())
@@ -45,7 +53,7 @@ func main() {
 	slog.Info("Shutting Down the Server")
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
-	err := server.Shutdown(ctx)
+	err = server.Shutdown(ctx)
 	if err != nil {
 		slog.Error("failed to shutdown - ", slog.String("error ", err.Error()))
 	}

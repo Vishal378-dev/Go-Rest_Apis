@@ -13,7 +13,7 @@ import (
 	"github.com/vishal/Rest_Apis/internal/utils"
 )
 
-func NewEmployee() http.HandlerFunc {
+func NewEmployee(storage storage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "POST" {
 			var employee types.Employee
